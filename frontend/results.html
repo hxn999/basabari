@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/94bdd9d72a.js" crossorigin="anonymous"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <header class="mb-6">
+        <nav class="flex justify-between items-center mx-auto max-w-7xl px-8 mt-6">
+            <h1 class="text-4xl font-bold max-[700px]:text-2xl">Basa<span class="text-green-600">Bari</span></h1>
+            <ul class="flex gap-14 items-center text-lg max-[700px]:hidden">
+                <li class="bg-green-400 p-3 rounded-full px-5 hover:cursor-pointer hover:bg-green-600">Post a Rent</li>
+                <li class="hover:text-green-600 hover:cursor-pointer hover:underline">Contact</li>
+                <li
+                    class="flex gap-2 items-center text-green-600 hover:text-green-700 hover:cursor-pointer hover:underline ">
+                    <i class="fa-solid fa-right-to-bracket hover:fa-shake" style="color: #16a34a;"></i> Sign In
+                </li>
+            </ul>
+            <button
+                class="bg-green-400 p-3 rounded-full px-5 hover:cursor-pointer hover:bg-green-600 flex items-center gap-3 hidden max-[700px]:block">
+                <i class="fa-solid fa-bars"></i> Menu </button>
+        </nav>
+    </header>
+    <hr>
+    <section class="mx-auto max-w-7xl mt-2 px-8">
+        <h3 class=""><i class="fa-solid fa-gear fa-lg"></i> Filters</h3>
+        <div class="flex justify-center">
+            <form action="POST" class="bg-green-200 flex  p-2 rounded-xl mt-3 gap-2 ">
+                <div class="flex gap-2 flex-col justify-center max-[700px]:gap-1 ">
+                    <div id="up" class="flex gap-2 max-[700px]:gap-1 ">
+
+                        <!-- find location -->
+                        <div
+                            class="bg-white px-3 h-11 rounded-xl flex justify-start gap-4  items-center  max-[700px]:h-9 w-[238px] max-[700px]:w-[190px]">
+
+                            <i class="fa-solid fa-location-dot"></i>
+                            <input class="w-full focus:outline-none max-[700px]:text-[12px] " type="text" name=""
+                                placeholder="Location" id="">
+
+                        </div>
+
+                        <!-- bedroom number -->
+                        <div
+                            class="bg-white p-3 h-11 rounded-xl flex justify-around items-center gap-2 max-[700px]:hidden">
+                            <i class="fa-solid fa-bed fa-lg"></i>
+                            Bedroom
+                            <input class="focus:outline-none bg-slate-200 text-center w-15 rounded-xl p-1" type="number"
+                                min="1" value="1" max="5" name="" id="">
+                        </div>
+
+                        <!-- floor size -->
+                        <div
+                            class="bg-white p-3 h-11 rounded-xl flex justify-around items-center gap-2 w-max max-[700px]:hidden">
+                            <img src="img/size.png" class="w-6 h-6" alt="">
+                            Floor Size
+                            <input class="focus:outline-none bg-slate-200 text-center w-20 rounded-lg p-1" type="number"
+                                min="1" value="500" max="500000" name="" id="">
+                        </div>
+                    </div>
+                    <div id="down" class="flex gap-2">
+                        <!-- home type -->
+                        <div class="bg-white p-3 h-11 rounded-xl flex justify-around items-center max-[700px]:hidden"
+                            style="width: 150px;">
+                            <i class="fa-solid fa-person fa-lg"></i>
+                            <select class="focus:outline-none" id="">
+                                <option value="">Bachelor</option>
+                                <option value=""> Family</option>
+                            </select>
+                        </div>
+                        <!-- price range -->
+                        <div
+                            class="bg-white p-2 pl-3 rounded-xl h-11  flex gap-3 items-center max-[700px]:h-9 max-[700px]:text-[12px] w-[365px] max-[700px]:w-max">
+                            <i class="fa-solid fa-bangladeshi-taka-sign fa-lg"></i>
+                            Price Range<i class="fa-solid fa-caret-left fa-flip-horizontal"></i>
+                            <input
+                                class="focus:outline-none bg-slate-200 text-center w-20 rounded-lg p-1 max-[700px]:text-[12px] max-[700px]:w-14"
+                                type="number" min="1000" value="1000" name="" id="">
+                            <i class="fa-solid fa-arrow-right"></i>
+                            <input
+                                class="focus:outline-none bg-slate-200 text-center w-20 rounded-lg p-1 max-[700px]:text-[12px] max-[700px]:w-14"
+                                type="number" min="1000" value="5000" name="" id="">
+                        </div>
+
+                        <!-- search -->
+                        <div id="search" class="flex">
+                            <button type="submit"
+                                class="bg-green-400 flex gap-2 px-3 h-11 items-center justify-center rounded-xl  w-[130px] max-[700px]:w-[90px] max-[700px]:text-[12px] max-[700px]:h-9"><i
+                                    class="fa-solid fa-magnifying-glass"></i>Search</button>
+
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </section>
+    <section class="mx-auto max-w-7xl mt-4 px-8">
+        <h3><span class="text-green-600 font-bold">1107</span> homes <span class="text-green-600 font-bold">found</span>
+            in Kazipara ... </h3>
+
+        <div class="grid grid-cols-3 gap-4 mt-5 max-[1024px]:grid-cols-2 max-[700px]:grid-cols-1">
+
+            <div class="flex flex-col p-3 rounded-xl gap-3 shadow-xl  border-2 border-gray-100">
+                <img class="rounded-xl" src="img/basa-pic.webp" alt="">
+                <div class="flex gap-4 items-center"><i class="fa-solid fa-location-dot"></i>Kazipara , Mirpur</div>
+                <div class="flex gap-3 items-center flex-wrap"><i class="fa-solid fa-bed"></i> Bed <span
+                        class="font-bold">2</span> <i class="fa-solid fa-bath"></i> Bath <span
+                        class="font-bold">2</span>
+                    <div class="flex items-center gap-3">
+
+                        <img src="img/size.png" class="w-6 h-6" alt=""> Floor Size <span
+                            class="font-bold">950sqft</span>
+                    </div>
+                </div>
+                <div class="flex gap-3 items-center">
+                    <div class="h-4 w-4 rounded-full bg-green-500"></div> Available
+                </div>
+                <div class="flex gap-2 items-center">Rent <span class="font-bold text-xl">5500</span> <i
+                        class="fa-solid fa-bangladeshi-taka-sign"></i> / <sub>month</sub></div>
+                <button class="bg-green-600 rounded-xl py-2">See Details</button>
+            </div>
+            
+            
+            
+            
+
+
+
+        </div>
+    </section>
+
+
+
+    <hr class="mt-6">
+    <footer class=" bottom-0   w-full ">
+        <div
+            class="mx-auto  max-w-7xl px-8 flex justify-between items-center my-6 max-[700px]:flex-col max-[700px]:gap-5 ">
+
+            <ul class="flex gap-10">
+                <li class="hover:text-green-600 hover:cursor-pointer hover:underline">About Us</li>
+                <li class="hover:text-green-600 hover:cursor-pointer hover:underline">Our Policy</li>
+            </ul>
+            <div class="flex items-center gap-3">
+                Follow Us On <i class="fa-solid fa-caret-left fa-flip-horizontal"></i>
+                <div class="flex gap-4">
+                    <i class="fa-brands fa-facebook fa-xl hover:text-blue-600 hover:cursor-pointer "></i>
+                    <i class="fa-brands fa-instagram fa-xl hover:text-red-500 hover:cursor-pointer "></i>
+                    <i class="fa-brands fa-linkedin fa-xl  hover:text-blue-600 hover:cursor-pointer"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <script>
+        let up = document.querySelector('#up')
+        let down = document.querySelector('#down')
+
+        let search = document.querySelector('#search')
+
+
+
+        function myFunction(x) {
+            if (x.matches) { // If media query matches
+                search.remove()
+                up.appendChild(search)
+
+            }
+            else {
+                search.remove()
+                down.appendChild(search)
+            }
+        }
+
+        // Create a MediaQueryList object
+        var x = window.matchMedia("(max-width: 700px)")
+
+        // Call listener function at run time
+        myFunction(x);
+
+        // Attach listener function on state changes
+        x.addEventListener("change", function () {
+            myFunction(x);
+        });
+    </script>
+</body>
+
+</html>
