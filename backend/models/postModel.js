@@ -30,6 +30,9 @@ const postSchema = mongoose.Schema(
         address:{
             type:String
         },
+        area:{
+            type:String
+        },
         mapSrc:{
             type:String
         },
@@ -45,6 +48,13 @@ const postSchema = mongoose.Schema(
         rentDate:{
             type:String
         },
+        post_id:{
+            type:String
+        },
+        available:{
+            type:Boolean,
+            default:true
+        }
        
     },{
         timestamps:true

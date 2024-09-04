@@ -10,9 +10,10 @@ export function Footer() {
     let [classN,setClassN] = useState("bottom-0  w-full")
 
     let match = useMatch("/")
+    let loginMatch = useMatch("/")
     const line =  <hr className="mt-6"/>
     useEffect(()=>{
-        if(match){
+        if(match || loginMatch){
             let newclass = "bottom-0 absolute w-full"
             setClassN(newclass)
         }

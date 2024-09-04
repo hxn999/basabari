@@ -6,6 +6,8 @@ import { faCircleXmark } from '@fortawesome/free-regular-svg-icons';
 import src from '../../assets/img/bed.webp'
 import { useDispatch, useSelector } from 'react-redux';
 import { formActions } from '../../../redux/slice/formSlice.js';
+import { AreaSelect } from './areaSelect.jsx';
+import { Toaster,toast } from 'sonner';
 
 import { fetchingActions, formPost } from '../../../redux/slice/fetchSlice.js';
 
@@ -115,9 +117,11 @@ export function PostRent() {
         //         dispatch(formPost(formData))
         //     }
         // })
+        let user_id = JSON.parse(localStorage.getItem("user")).user_id
         dispatch(formActions.formValidate())
         if (formData.errorState.isValid) {
-            dispatch(formPost({ ...formData, errorState: {} }))
+            dispatch(formPost({ ...formData, errorState: {},userid: user_id}))
+            toast.success('Rent has been Posted!')
         }
 
     }
@@ -136,8 +140,7 @@ export function PostRent() {
     let imageI = 0
 
     let imageElement = formData.images.map((e) => {
-        return <div className='w-20 max-[700px]:w-12 max-[700px]:h-12 h-20 rounded-xl hover:cursor-pointer relative ' onClick={deleteImage}> <FontAwesomeIcon id={imageI} className='absolute top-1 right-1 text-red-700' icon={faCircleXmark} size='xl' onClick={deleteImage} /> <img className='w-full h-full rounded-xl object-cover' id={imageI++} src={e} alt=""
-            onClick={deleteImage} /> </div>
+        return  <img    className="w-32 h-32 rounded-xl object-cover after:content-['fajdflkajdflkadjf'] after:ml-0.5 after:text-red-500" id={imageI++} src={e} alt="" onClick={deleteImage} /> 
     })
 
     useEffect(() => {
@@ -146,19 +149,22 @@ export function PostRent() {
         input.id = "house"
         console.log(input)
     }, [])
+    useEffect(() => {
+        dispatch(formActions.formValidate())
+    }, [formData])
     return (
         <>
 
             <section className="mx-auto max-w-7xl mt-2 px-8 ">
-                <h1 className="font-semibold text-2xl">Post your Home Rent</h1>
+                <h1 className="font-semibold text-2xl ">Post your Home Rent </h1>
 
                 <form action="" className='flex flex-col gap-7 mt-7' onSubmit={formHandler}>
-                    <div className='flex flex-col gap-4'>
+                    {/* <div className='flex flex-col gap-4'>
 
                         <h3 className='font-semibold'> user_id <span className='text-red-700 text-lg'>*</span></h3>
                         <input className={`w-full p-4 pl-8 rounded-full border-2 border-green-400 focus:outline-none focus:shadow-inner focus:border-green-700 ${formData.errorState.errors.address ? "border-red-700 focus:border-red-900" : null}`} type="text" name="map" id="" placeholder='Enter your full address ' value={formData.userid} onChange={handleid} />
-                        <p className='pl-8 error text-xs text-red-700'>{formData.errorState.errors.address}</p>
-                    </div>
+                        
+                    </div> */}
                     <div className='flex flex-col gap-4'>
 
 
@@ -214,6 +220,7 @@ export function PostRent() {
                             </ol>
                         </div>
                     </div>
+                    <AreaSelect/>
                     <div className='flex flex-col gap-4'>
 
                         <h3 className='font-semibold'> Full Address <span className='text-red-700 text-lg'>*</span></h3>
@@ -255,7 +262,7 @@ export function PostRent() {
                     </div>
 
                 </form>
-
+                <Toaster richColors position="top-right" />
             </section>
         </>
     )

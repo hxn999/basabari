@@ -4,7 +4,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 
 // initial state
 const initialState = {
-    userid:"hasan",
+    userid:"",
     images:[],
     bed:null,
     bath:null,
@@ -13,6 +13,7 @@ const initialState = {
     description:"",
     facilities:[],
     address:"",
+    area:"select",
     mapSrc:"",
     rent:null,
     charges:null,
@@ -25,6 +26,7 @@ const initialState = {
         errors:{
             bed:"",
             bath:"",
+            area:"",
             address:"",
             image:"",
             rent:"",
@@ -32,7 +34,6 @@ const initialState = {
         },
         isLoading:false,
         post:[]
-    
     }
 
 }
@@ -107,6 +108,15 @@ const formSlice = createSlice(
                 }
                 else{
                     state.errorState.errors.address=""
+                    
+                }
+                if(state.area=="select" )
+                {
+                    state.errorState.errors.area="Please Enter Residence Area"
+                    state.errorState.isValid=false
+                }
+                else{
+                    state.errorState.errors.area=""
                     
                 }
                 if(state.rentDate=="" )

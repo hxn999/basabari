@@ -20,7 +20,7 @@ export function RentCard() {
                     <div className="flex gap-2 items-center flex-wrap">Service Charges <span
                         className="font-bold text-xl">{data.isSinglePost? data.singlePost.post[0].charges :null}</span> <FontAwesomeIcon icon={faBangladeshiTakaSign} /> /
                         <sub>month</sub> (Security Guard ,Water ,Gas)</div>
-                    <button className="bg-green-500 rounded-xl py-4 flex gap-3 justify-center items-center font-semibold"><FontAwesomeIcon icon={faPhone} size="xl"/> Contact Owner</button>
+                    <button className="btn btn-lg bg-green-400 rounded-xl py-4 flex gap-3 justify-center hover:bg-green-600 items-center font-semibold"><FontAwesomeIcon icon={faPhone} size="xl"/> Contact Owner</button>
 
                 </div>
             </div>

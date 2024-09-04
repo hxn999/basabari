@@ -10,12 +10,13 @@ import { decode } from "node-base64-image"
 
 // internal imports
 import postRouter from './routers/postRouter.js'
+import authRouter from './routers/authRouter.js'
 
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express()
 dotenv.config()
-app.use(cors())
+app.use(cors({credentials:true,origin:'http://localhost:5173'}))
 
 // database connection
 
@@ -28,6 +29,7 @@ database().then(()=>console.log("database connected!!")).catch(()=>console.log("
 // request parser
 app.use(express.json({limit: '50mb'}));
 app.use(express.urlencoded({limit: '50mb',extended:true}))
+app.use(cookieParser())
 
 // set static folder
 app.use(express.static(path.join(__dirname,'public')));
@@ -35,6 +37,7 @@ app.use(express.static(path.join(__dirname,'public')));
 // routing setup
 // app.use('/',homeRouter)
 app.use('/posts',postRouter) 
+app.use('/auth',authRouter) 
 // app.use('/admin',adminRouter) 
 
 

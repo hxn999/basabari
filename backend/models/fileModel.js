@@ -2,15 +2,8 @@ import mongoose from "mongoose";
 
 const fileSchema = mongoose.Schema(
     {
-        name:{
-            type:String,
-            required:true,
-            trim:true
-        },
-        file:{
-            type:String,
-            required:true,
-            trim:true
+        count:{
+            type:Number
         }
        
     },{
