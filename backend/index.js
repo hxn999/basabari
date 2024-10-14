@@ -11,6 +11,7 @@ import { decode } from "node-base64-image"
 // internal imports
 import postRouter from './routers/postRouter.js'
 import authRouter from './routers/authRouter.js'
+import adminRouter from './routers/adminRouter.js'
 
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -21,7 +22,7 @@ app.use(cors({credentials:true,origin:'http://localhost:5173'}))
 // database connection
 
 async function database() {
-    await mongoose.connect(`mongodb://localhost/post`)
+    await mongoose.connect(`mongodb+srv://hh8391781:DZbIjRb1aOFP6yaV@cluster0.j8zgr.mongodb.net/basabari?retryWrites=true&w=majority&appName=Cluster0`)
 }
 database().then(()=>console.log("database connected!!")).catch(()=>console.log("database not connected"))
 
@@ -34,11 +35,12 @@ app.use(cookieParser())
 // set static folder
 app.use(express.static(path.join(__dirname,'public')));
 
+
 // routing setup
 // app.use('/',homeRouter)
-app.use('/posts',postRouter) 
+app.use('/post',postRouter) 
 app.use('/auth',authRouter) 
-// app.use('/admin',adminRouter) 
+app.use('/admin',adminRouter) 
 
 
 // server startup

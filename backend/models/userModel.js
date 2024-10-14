@@ -17,7 +17,7 @@ const userSchema = mongoose.Schema(
             required:true,
             trim:true
         },
-        user_id:{
+        userId:{
             type:String,
             required:true,
             trim:true
@@ -39,7 +39,7 @@ const userSchema = mongoose.Schema(
         },
         area:{
             type:String,
-            // required:true,
+            required:true,
             trim:true
         },
         
@@ -48,7 +48,10 @@ const userSchema = mongoose.Schema(
             required:true,
             trim:true
         },
-        
+        isVerified:{
+            type:Boolean,
+            required:true,
+        },
         
         lat:{
             type:Number,
@@ -56,6 +59,25 @@ const userSchema = mongoose.Schema(
         long:{
             type:Number,
         },
+        gender:{
+            type:String,
+            required:true,
+        },
+        evidence:{
+            type:Array,
+            required:true,
+        },
+        fbLink:{
+            type:String,
+            trim:true
+        }
+        ,
+        date:{
+            type:Number,
+            trim:true,
+            required:true
+        }
+        ,
        
     },{
         timestamps:true

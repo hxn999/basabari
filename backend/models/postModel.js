@@ -2,18 +2,34 @@ import mongoose from "mongoose";
 
 const postSchema = mongoose.Schema(
     {
-        userid:{
+        userId:{
             type:String,
+            required:true,
+
             trim:true
         },
         images:{
-            type:Array
+            type:Array,
+            required:true,
         },
         bed:{
-            type:Number
+            type:Number,
+            required:true,
+
+        },
+        living:{
+            type:Boolean,
+            required:true,
+
+        },
+        dining:{
+            type:Boolean,
+            required:true,
+
         },
         bath:{
-            type:Number
+            type:Number,
+            required:true,
         },
         balcony:{
             type:Number
@@ -22,38 +38,83 @@ const postSchema = mongoose.Schema(
             type:Number
         },
         description:{
-            type:String
+            type:String,
+
         },
-        facilities:{
-            type:Array
+        amenities:{
+            type:Object,
+            required:true,
         },
         address:{
-            type:String
+            type:String,
+            required:true,
         },
         area:{
-            type:String
+            type:String,
+            required:true,
         },
-        mapSrc:{
-            type:String
-        },
+       
         rent:{
-            type:Number
+            type:Number,
+            required:true,
         },
-        charges:{
-            type:Number
+        advance:{
+            type:Number,
+            required:true,
         },
+        utilityBills:{
+            type:Number,
+            
+        }
+        ,
         chargeCategory:{
-            type:String
+            type:Array
         },
         rentDate:{
-            type:String
+            type:String,
+            required:true,
         },
-        post_id:{
-            type:String
+        postId:{
+            type:String,
+            required:true,
         },
         available:{
             type:Boolean,
+            required:true,
             default:true
+        },
+        lat:{
+            type:Number,
+            
+        },
+        long:{
+            type:Number
+        },
+        type:{
+            type:String,
+            default:"Any"
+            
+        },
+        impression:{
+            type:Number,
+            default:0
+        },
+        comments:{
+            type:Array,
+            default:[null]
+        },
+        isApproved:{
+            type:Boolean,
+            default:false
+        },
+        fbLink:{
+            type:String,
+            trim:true,
+        },
+        date:{
+            type:Number,
+            trim:true,
+            required:true
         }
        
     },{

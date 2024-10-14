@@ -1,133 +1,248 @@
 import { decode } from "node-base64-image"
-import { mkdir } from 'node:fs'
 
+import { mkdir, unlink, access, rm } from 'fs/promises'
+import { constants } from "fs"
+import { cipher } from "../middleware/cipher.js"
 import { Post } from "../models/postModel.js"
 import { User } from "../models/userModel.js"
 import { File } from "../models/fileModel.js"
-import mongoose from "mongoose";
+import mongoose from "mongoose"
+
+
 
 
 export async function postServer(req, res) {
 
-    
-   
-    console.log(req.query)
-    
-    const regex = new RegExp(escape(req.query.area), "i");
-   let posts = await Post.find({
-        area:regex,
-        rent:{$gt:parseInt( req.query.gt),$lt:parseInt(req.query.lt)},
-        bed:{$gt:(parseInt(req.query.bed))},
-        floorSize:{$gt:parseInt(req.query.floor)},
-    })
-    res.status(500).json({
-        hi: "msg",
-        posts: posts
-    })
-    // console.log(posts)
+    try {
+
+        // checking api_key of client 
+
+        if (req.query.api_key != process.env.API_KEY) throw Error("UnAuthorized!!")
+
+
+        // querying to database for posts
+
+        const regex = new RegExp(`${req.query.area}\\s*`, "i");
+        let posts = await Post.find({
+            area: regex,
+            rent: { $gt: parseInt(req.query.gt), $lt: parseInt(req.query.lt) },
+            bed: { $gt: (parseInt(req.query.bed)-1) },
+            bath: { $gt: (parseInt(req.query.bath)-1) },
+            floorSize: { $gt: parseInt(req.query.floor) },
+            isApproved:true
+        })
+
+        // responsing all posts
+
+       
+            
+            res.status(200).json({
+                post: posts
+            })
+
+
+
+    } catch (error) {
+
+        res.status(500).json({
+            err: error.message
+        })
+
+    }
+
+
 
 }
 
 export async function getSinglePost(req, res) {
-    
-    let post = await Post.find({
-        _id:req.body._id
-    })
-    let ownerId = post[0].userid
-    let ownerObj = await User.find({user_id:ownerId})
-    let owner ={
-        name:ownerObj[0].name,
-        phone:ownerObj[0].phone,
-        pfp:ownerObj[0].pfpSrc,
 
+    try {
+
+        if (req.query.api_key != process.env.API_KEY) throw Error("UnAuthorized!!")
+
+        // getting property owner info from database
+        let _id = req.query._id
+        let singlePost = await Post.findOne({_id})
+        
+        let ownerObj = await User.findOne({userId: singlePost.userId })
+        let owner = null
+        if (ownerObj&&singlePost) {
+            owner = {
+                name: ownerObj.name,
+                phone: ownerObj.phone,
+                pfp: ownerObj.pfpSrc,
+                fbLink:ownerObj.fbLink
+            }
+        } else {
+            throw Error("Not Found !!")
+        }
+
+        let updatedImpression = singlePost.impression + 1
+
+       
+            
+            res.status(200).json({
+                owner,
+                singlePost
+            })
+    
+        
+
+        await Post.findOneAndUpdate({_id},{impression:updatedImpression})
+
+    } catch (error) {
+        res.status(500).json({
+            err: error.message
+        })
     }
+
+
+}
+
+export async function createPost(req, res) {
+
+    try {
     
-    console.log(req.body)
-    console.log(owner)
-    res.status(200).json({
-        post:post,
-        owner:owner
-    })
-    // console.log(post
+        
+        if (req.query.api_key != process.env.API_KEY) throw Error("UnAuthorized!!")
+
+        // creating unique post id 
+
+        let totalPostCount = await File.findOne({ _id: new mongoose.Types.ObjectId("6706f1de289ba53e228e8234") })
+
+
+
+        const postId = cipher(req.body.area.slice(0, 4) + totalPostCount.count, 16)
+
+        // creating folder for post images
+
+        await mkdir(`./public/images/user-${req.userId}/${postId}`, { recursive: true }, (err) => {
+            if (err) throw Error("Folder creating error !!")
+        });
+
+        // converting base64 image to jpg files and creating public links
+
+        let i = 0
+        let imgSrc = []
+        req.body.images.map(async (base64) => {
+
+
+            i++
+            imgSrc.push(`/images/user-${req.userId}/${postId}/${cipher("image" + postId, i)}.jpg`)
+            await decode(base64.slice(22), { fname: `./public/images/user-${req.userId}/${postId}/${cipher("image" + postId, i)}`, ext: 'jpg' });
+
+        })
+
+        // saving the post on database
+
+        const post = new Post({
+            userId: req.userId,
+            images: imgSrc,
+            bed: req.body.bed,
+            bath: req.body.bath,
+            living:req.body.living,
+            dining:req.body.dining,
+            balcony: req.body.balcony,
+            floorSize: req.body.floorSize,
+            description: req.body.description,
+            amenities: req.body.amenities,
+            area: req.body.area,
+            address: req.body.address,
+            rent: req.body.rent,
+            lat: req.body.lat,
+            long: req.body.long,
+            advance: req.body.advance,
+            utilityBills: req.body.utilityBills,
+            rentDate: req.body.rentDate,
+            type: req.body.type,
+            impression: 0,
+            comments: [null],
+            isApproved: false,
+            fbLink: req.body.fbLink,
+            postId,
+            date:Date.now()
+        })
+
+        await post.save()
+
+
+        // updating total post count
+        let upCount = totalPostCount.count + 1
+        await File.findOneAndUpdate({ _id: new mongoose.Types.ObjectId("66d5f1fee8b87b8984f6a94a") }, { count: upCount })
+
+        
+            res.status(200).json({
+                msg: "Post saved successfully !!"
+            })
+       
+       
+
+    } catch (error) {
+
+        // responsing user errors if post saving fails
+        res.status(500).json({
+            err: error.message
+        })
+    }
 
 }
 
-export async function postSave(req, res) {
+export async function updatePost(req, res) {
+    try {
 
-    
-    let c = await File.find({_id: new mongoose.Types.ObjectId("66d5f1fee8b87b8984f6a94a")})
-    // let c1 = JSON.parse(c[0])
-    let counter = c[0].count
-    console.log(c[0].count)
 
-    mkdir(`./public/images/user-${req.body.userid}/${req.body.area.slice(0,3)+counter}`, { recursive: true }, (err) => {
-        if (err) console.log(err);
-    });
-    // console.log(req.body.image[0].slice(22))
-    console.log("/////////////////////////////////////////")
-    let i = 0
-    let imgSrc = []
-    req.body.images.map(async (base64) => {
-        console.log("------------------->")
-        let temp = base64.slice(22)
-        let temp1 = base64.slice(0, 64)
-        console.log(temp1)
-        i++
-        imgSrc.push(`/images/user-${req.body.userid}/${req.body.area.slice(0,3)+counter}/image-${i}.jpg`)
-        await decode(base64.slice(22), { fname: `./public/images/user-${req.body.userid}/${req.body.area.slice(0,3)+counter}/image-${i}`, ext: 'jpg' });
+        if (req.query.api_key != process.env.API_KEY) throw Error("UnAuthorized!!")
 
-    })
-    console.log(req.body)
-    console.log(imgSrc)
-    // console.log(req.body)
-    const post = new Post({
-        userid: req.body.userid,
-        images: imgSrc,
-        bed: req.body.bed,
-        bath: req.body.bath,
-        balcony: req.body.balcony,
-        floorSize: req.body.floorSize,
-        description: req.body.description,
-        facilities: req.body.facilities,
-        area: req.body.area,
-        address: req.body.address,
-        mapSrc: req.body.mapSrc,
-        rent: req.body.rent,
-        charges: req.body.charges,
-        chargeCategory: req.body.chargeCategory,
-        rentDate: req.body.rentDate,
-        post_id:req.body.area.slice(0,3)+counter
-    })
-    await post.save()
-    let upCount = counter+1
-    await File.findOneAndUpdate({_id:new mongoose.Types.ObjectId("66d5f1fee8b87b8984f6a94a")},{count:upCount})
-    res.status(200).json({
-        msg: "saved successfully"
-    })
+        // finding post from database and updating it
 
-}
-export async function fileSave(req, res) {
-    const base64 = req.body.file
-    // console.log(base)
-    const files = new File(req.body)
-    await files.save()
-    await File.findOneAndUpdate({ file: base64 }, { file: '' })
-    await decode(base64, { fname: './pics/example1', ext: 'jpg' });
+        if (req.body.data.images) {
+            // firstly removing all previous post images
 
-    res.status(200).json({
-        msg: "file saved successfully"
-    })
-}
-export  function auth(req,res) {
-    // res.cookie("resCookie",'mynameishasan')
-    console.log(req.cookies)
-    res.status(200).json({lel:"lel"})
-}
+            await rm(`./public/images/user-${req.userId}/${req.body.postId}`, { recursive: true, force: true })
 
-export async function updatePost(req,res)
-{
-    console.log(req.body);
-    await Post.findOneAndUpdate({_id:req.body.query},req.body.data)
-    res.status(200).json({hi:"msg"})
-    
+            // creating folder for post images
+
+            await mkdir(`./public/images/user-${req.userId}/${req.body.postId}`, { recursive: true }, (err) => {
+                if (err) throw Error("Folder creating error !!")
+            })
+
+            // converting base64 image to jpg files and creating public links
+
+            let i = 0
+            let imgSrc = []
+            req.body.data.images.map(async (base64) => {
+
+                i++
+                imgSrc.push(`/images/user-${req.userId}/${req.body.postId}/${cipher("image" + req.body.postId, i)}.jpg`)
+                await decode(base64.slice(22), { fname: `./public/images/user-${req.userId}/${req.body.postId}/${cipher("image" + req.body.postId, i)}`, ext: 'jpg' })
+
+            })
+
+            req.body.data.images = imgSrc
+           
+        }
+
+        await Post.findOneAndUpdate(
+            {
+                $and: [
+                    {
+                        _id: req.body._id
+                    },
+                    {
+                        userId: req.userId
+                    }
+                ]
+            },
+            req.body.data
+        )
+
+        res.status(200).json({ msg: "Post updated successfully !!" })
+
+
+    } catch (error) {
+        res.status(500).json({
+            err: error.message
+        })
+    }
+
 }
