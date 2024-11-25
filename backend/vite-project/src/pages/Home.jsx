@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { fetchingActions } from "../../redux/slice/fetchSlice.js";
 import {place} from '../assets/assets.js'
-
+import basa from '../assets/basa.jpg'
 
 
 export function Home() {
@@ -50,6 +50,7 @@ export function Home() {
 
     // hiding or showing suggestions 
     useEffect(() => {
+        
         console.log("hi")
         checkMobile(media)
         console.log(mobile)
@@ -64,12 +65,12 @@ export function Home() {
         
     }, [search])
 
-
+  
 
 
     return (
         <div className="flex-1">
-            <div className=" h-[74vh] mt-6 pt-16 max-[700px]:pt-24 bg-no-repeat bg-cover lel " onClick={() => setVisibility("hidden")} >
+            <div  className=" h-[74vh] mt-6 pt-16 max-[700px]:pt-24  bg-cover  lel " onClick={() => setVisibility("hidden")} >
                 <section className="mx-auto max-w-7xl mt-2 px-8 flex flex-col items-center justify-center gap-10   ">
 
 

@@ -17,12 +17,12 @@ import adminRouter from './routers/adminRouter.js'
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express()
 dotenv.config()
-app.use(cors({credentials:true,origin:'http://localhost:5173'}))
+app.use(cors({credentials:true}))
 
 // database connection
 
 async function database() {
-    await mongoose.connect(`mongodb+srv://hh8391781:DZbIjRb1aOFP6yaV@cluster0.j8zgr.mongodb.net/basabari?retryWrites=true&w=majority&appName=Cluster0`)
+    await mongoose.connect(process.env.MONGO_STRING)
 }
 database().then(()=>console.log("database connected!!")).catch(()=>console.log("database not connected"))
 

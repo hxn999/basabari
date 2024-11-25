@@ -158,7 +158,7 @@ export function PostFilter() {
                         setSortText(<>Price: Low <FontAwesomeIcon icon={faArrowRight} /> High</>)
                         dispatch(fetchingActions.sort("pra"))
                         dispatch(fetchingActions.set({ key: "sort", value: "pra" }))
-                    }} className="btn max-[700px]:btn-sm w-full bg-green-400 hover:bg-green-600 rounded-3xl">Price: Low <FontAwesomeIcon icon={faArrowRight} /> High</button>
+                    }} className="btn max-[700px]:btn-sm w-full bg-green-400 hover:bg-green-600 rounded-3xl z-50">Price: Low <FontAwesomeIcon icon={faArrowRight} /> High</button>
                     <button disabled={!sort} onClick={() => {
                         setSort(v => !v)
                         setSortText(<>Price: High <FontAwesomeIcon icon={faArrowRight} /> Low</>)
@@ -180,7 +180,7 @@ export function PostFilter() {
 
 
                     {/* -------------------- modal filter -------------------------------------------- */}
-            <div className={`absolute z-30 transition-all flex flex-col gap-4 duration-500 bg-white border border-black w-4/5 p-5 rounded-2xl ${!filter ? "-top-[1000px]" : "top-0"}`}>
+            <div className={`absolute z-30 transition-all flex flex-col gap-4 duration-500 bg-white border border-black w-4/5 p-5 rounded-2xl ${!filter ? "-top-[1000px]" : "top-24"}`}>
 
                 <div>
                     <div className="flex gap-2 flex-col justify-center max-[700px]:gap-1 ">
