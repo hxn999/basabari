@@ -131,7 +131,7 @@ export async function logOut(req, res) {
 
     } catch (error) {
         console.log(error);
-        
+
 
         // if cookie clearing fails sending error 
 
@@ -261,7 +261,7 @@ export async function createUser(req, res) {
             pfpSrc,
             gender: req.body.gender,
             evidence,
-            date:Date.now(),
+            date: Date.now(),
             fbLink: req.body.fbLink
         })
         await user.save()
@@ -319,25 +319,25 @@ export async function getProfilePost(req, res) {
             userId: req.userId
         })
 
-     
 
-            res.status(200).json(
-                {
-                    user: {
-                        email: user.email,
-                        phone: user.phone,
-                        pfpSrc: user.pfpSrc,
-                        evidence: user.evidence,
-                        address: user.address,
-                        area: user.area,
-                        isVerified: user.isVerified,
-                        fbLink: user.fbLink
-                    }
-                    ,
-                    posts,
+
+        res.status(200).json(
+            {
+                user: {
+                    email: user.email,
+                    phone: user.phone,
+                    pfpSrc: user.pfpSrc,
+                    evidence: user.evidence,
+                    address: user.address,
+                    area: user.area,
+                    isVerified: user.isVerified,
+                    fbLink: user.fbLink
                 }
-            )
-    
+                ,
+                posts,
+            }
+        )
+
 
     } catch (error) {
         res.status(500).json({
@@ -356,16 +356,16 @@ export async function getProfile(req, res) {
         console.log(req.userId)
         const user = await User.findOne({ userId: req.userId })
 
-       
 
-            res.status(200).json(
-                {
-                    ...user._doc,
-                    password: null,
-                    refreshToken: null,
 
-                }
-            )
+        res.status(200).json(
+            {
+                ...user._doc,
+                password: null,
+                refreshToken: null,
+
+            }
+        )
 
 
     } catch (error) {
@@ -423,7 +423,7 @@ export async function editProfile(req, res) {
             }
 
             // firstly, deleting existing user profile picture
-            if (exists) {await unlink(`./public/images/user-${req.userId}/profile.jpg`)}
+            if (exists) { await unlink(`./public/images/user-${req.userId}/profile.jpg`) }
 
             // decoding new profile picture and saving
             await decode(req.body.data.pfp.slice(22), { fname: `./public/images/user-${req.userId}/profile`, ext: 'jpg' });
@@ -446,7 +446,7 @@ export async function editProfile(req, res) {
             } catch (e) {
                 exists = false
             }
-            if (exists) {await rm(`./public/images/user-${req.userId}/evidence`, { recursive: true, force: true })}
+            if (exists) { await rm(`./public/images/user-${req.userId}/evidence`, { recursive: true, force: true }) }
 
             // creating folder to save evidence documents
 

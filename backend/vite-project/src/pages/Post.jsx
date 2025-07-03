@@ -41,6 +41,8 @@ export function Post() {
         content = <Loading text={"Fetching Post"} />
     }
     else if (isError) {
+        console.log();
+        
         content = <Error text={"Failed to load your post"} />
     }
     else if (isSuccess) {

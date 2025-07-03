@@ -17,28 +17,29 @@ export async function postServer(req, res) {
 
         // checking api_key of client 
 
-        if (req.query.api_key != process.env.API_KEY) throw Error("UnAuthorized!!")
+        // if (req.query.api_key != process.env.API_KEY) throw Error("UnAuthorized!!")
 
 
         // querying to database for posts
+        
 
         const regex = new RegExp(`${req.query.area}\\s*`, "i");
         let posts = await Post.find({
             area: regex,
             rent: { $gt: parseInt(req.query.gt), $lt: parseInt(req.query.lt) },
-            bed: { $gt: (parseInt(req.query.bed)-1) },
-            bath: { $gt: (parseInt(req.query.bath)-1) },
+            bed: { $gt: (parseInt(req.query.bed) - 1) },
+            bath: { $gt: (parseInt(req.query.bath) - 1) },
             floorSize: { $gt: parseInt(req.query.floor) },
-            isApproved:true
+            isApproved: true
         })
 
         // responsing all posts
 
-       
-            
-            res.status(200).json({
-                post: posts
-            })
+
+
+        res.status(200).json({
+            post: posts
+        })
 
 
 
@@ -58,37 +59,39 @@ export async function getSinglePost(req, res) {
 
     try {
 
-        if (req.query.api_key != process.env.API_KEY) throw Error("UnAuthorized!!")
-
+        // if (req.query.api_key != process.env.API_KEY) throw Error("UnAuthorized!!")
+        console.log("hifajslkdfj")
         // getting property owner info from database
         let _id = req.query._id
-        let singlePost = await Post.findOne({_id})
+        let singlePost = await Post.findOne({ _id })
         
-        let ownerObj = await User.findOne({userId: singlePost.userId })
+        let ownerObj = await User.findOne({ userId: singlePost.userId })
         let owner = null
-        if (ownerObj&&singlePost) {
+        if (ownerObj && singlePost) {
             owner = {
                 name: ownerObj.name,
                 phone: ownerObj.phone,
                 pfp: ownerObj.pfpSrc,
-                fbLink:ownerObj.fbLink
+                fbLink: ownerObj.fbLink
             }
         } else {
             throw Error("Not Found !!")
         }
-
+        
         let updatedImpression = singlePost.impression + 1
 
-       
-            
-            res.status(200).json({
-                owner,
-                singlePost
-            })
-    
-        
 
-        await Post.findOneAndUpdate({_id},{impression:updatedImpression})
+        console.log("hi 2")
+        
+        res.status(200).json({
+            owner,
+            singlePost
+        })
+        console.log("hi 3")
+
+
+
+        await Post.findOneAndUpdate({ _id }, { impression: updatedImpression })
 
     } catch (error) {
         res.status(500).json({
@@ -102,8 +105,8 @@ export async function getSinglePost(req, res) {
 export async function createPost(req, res) {
 
     try {
-    
-        
+
+
         if (req.query.api_key != process.env.API_KEY) throw Error("UnAuthorized!!")
 
         // creating unique post id 
@@ -140,8 +143,8 @@ export async function createPost(req, res) {
             images: imgSrc,
             bed: req.body.bed,
             bath: req.body.bath,
-            living:req.body.living,
-            dining:req.body.dining,
+            living: req.body.living,
+            dining: req.body.dining,
             balcony: req.body.balcony,
             floorSize: req.body.floorSize,
             description: req.body.description,
@@ -160,7 +163,7 @@ export async function createPost(req, res) {
             isApproved: false,
             fbLink: req.body.fbLink,
             postId,
-            date:Date.now()
+            date: Date.now()
         })
 
         await post.save()
@@ -170,12 +173,12 @@ export async function createPost(req, res) {
         let upCount = totalPostCount.count + 1
         await File.findOneAndUpdate({ _id: new mongoose.Types.ObjectId("66d5f1fee8b87b8984f6a94a") }, { count: upCount })
 
-        
-            res.status(200).json({
-                msg: "Post saved successfully !!"
-            })
-       
-       
+
+        res.status(200).json({
+            msg: "Post saved successfully !!"
+        })
+
+
 
     } catch (error) {
 
@@ -219,7 +222,7 @@ export async function updatePost(req, res) {
             })
 
             req.body.data.images = imgSrc
-           
+
         }
 
         await Post.findOneAndUpdate(

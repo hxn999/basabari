@@ -26,7 +26,7 @@ export const apiSlice = createApi({
         }),
         getSinglePost:builder.query({
             query:(param)=>({
-                url:`/post/single?api_key=${import.meta.env.VITE_REACT_APP_API_KEY}&_id=${param}`,
+                url:`/post/single?_id=${param}`,
                 credentials:"include",
             })
             

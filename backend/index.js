@@ -17,32 +17,37 @@ import adminRouter from './routers/adminRouter.js'
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express()
 dotenv.config()
-app.use(cors({credentials:true}))
-
+app.use(cors({ credentials: true,  origin: 'http://localhost:5173',}))
+app.use((req,res,next)=>{
+    res.setHeader("Access-Control-Allow-Origin",'http://localhost:5173')
+    next()
+})
 // database connection
 
 async function database() {
     await mongoose.connect(process.env.MONGO_STRING)
 }
-database().then(()=>console.log("database connected!!")).catch(()=>console.log("database not connected"))
+database().then(() => console.log("database connected!!")).catch(() => console.log("database not connected"))
 
 
 // request parser
-app.use(express.json({limit: '50mb'}));
-app.use(express.urlencoded({limit: '50mb',extended:true}))
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }))
 app.use(cookieParser())
 
 // set static folder
-app.use(express.static(path.join(__dirname,'public')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 
 // routing setup
 // app.use('/',homeRouter)
-app.get("/",(req,res)=>res.json({"msg":"hi"}))
-app.use('/post',postRouter) 
-app.use('/auth',authRouter) 
-app.use('/admin',adminRouter) 
+app.get("/", (req, res) => res.json({ "msg": "hi" }))
+app.use('/post', postRouter)
+app.use('/auth', authRouter)
+app.use('/admin', adminRouter)
 
 
 // server startup
-app.listen(process.env.PORT  , ()=> console.log("Server running on PORT 3000! http://localhost:3000"))
+app.listen(process.env.PORT, () => console.log("Server running on PORT 3000! http://localhost:3000"))
+
+export {app}

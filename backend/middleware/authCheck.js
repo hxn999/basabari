@@ -8,9 +8,9 @@ export async function authCheck(req, res, next) {
         // verifying user jwt access token
 
 
-       
+
         const user = jwt.verify(req.cookies.accessToken, process.env.ACCESS_TOKEN_SECRET)
- 
+
 
         if (user) {
 
@@ -71,7 +71,7 @@ export async function authCheck(req, res, next) {
 
                         // authorization successful
                         next()
-                    } 
+                    }
 
 
                     // if user's refresh token and database refresh token doesn't match
@@ -90,9 +90,9 @@ export async function authCheck(req, res, next) {
             // responsing errors
             console.log("unautho")
 
-           res.status(500).json({
-                err:_error.message
-           })
+            res.status(500).json({
+                err: _error.message
+            })
 
 
         }

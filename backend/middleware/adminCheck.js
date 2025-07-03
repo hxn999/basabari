@@ -13,14 +13,14 @@ export async function adminCheck(req, res, next) {
 
         if (admin) {
 
-         if(admin.role==="admin"&&admin.name==="akib_hasan")  {
-            next()
-         }
-         else{
-            throw Error("Unauthorized !!")
-         }
+            if (admin.role === "admin" && admin.name === "akib_hasan") {
+                next()
+            }
+            else {
+                throw Error("Unauthorized !!")
+            }
             // authentication successfull and forwarding to the next function
-           
+
         }
 
         else {
@@ -38,7 +38,7 @@ export async function adminCheck(req, res, next) {
     catch (error) {
 
         res.status(500).json({
-            err:error.message
+            err: error.message
         })
 
 
